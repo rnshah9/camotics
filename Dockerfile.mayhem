@@ -1,11 +1,7 @@
 FROM --platform=linux/amd64 ubuntu:20.04 as builder
 
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y scons build-essential qt5-default python-six \
-    libqt5websockets5-dev libqt5opengl5-dev libnode-dev libglu1-mesa-dev \
-    pkgconf git
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-distutils
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential scons build-essential qt5-default python-six libqt5websockets5-dev libqt5opengl5-dev libnode-dev libglu1-mesa-dev pkgconf git python3-distutils python3-pip
 
 RUN git clone https://github.com/CauldronDevelopmentLLC/cbang.git
 RUN scons -C cbang
@@ -13,15 +9,10 @@ ENV CBANG_HOME=/cbang
 
 COPY . /repo
 WORKDIR /repo
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
 RUN pip3 install six
 RUN scons
 
-RUN mkdir -p /deps
-RUN ldd /repo/gcodetool | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
-
 FROM ubuntu:20.04 as package
-
-COPY --from=builder /deps /deps
-COPY --from=builder /repo/gcodetool /repo/gcodetool
-ENV LD_LIBRARY_PATH=/deps
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev libexpat-dev
+COPY --from=builder /repo/gcodetool /
