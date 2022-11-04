@@ -1,6 +1,5 @@
 project: camotics
-target: gcodetool
+target: find
 cmds:
-  - cmd: /gcodetool
-    env:
-      DISABLE_SMOKETEST: '1'
+  - cmd: /fuzz_find
+    libfuzzer: true
