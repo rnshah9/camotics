@@ -11,9 +11,9 @@ COPY . /repo
 WORKDIR /repo
 RUN pip3 install six
 RUN scons
-RUN clang++ /repo/mayhem/fuzz_find.cpp -L/repo/build  -lGCode -I/repo/src/gcode -I/cbang/src -I/repo/src -fsanitize=fuzzer,address -o /fuzz -L/cbang/lib -lcbang -lcbang-boost -llz4 -lbz2 -levent -lre2 -lsqlite3 -lyaml -lz
+RUN clang++ /repo/mayhem/fuzz_find.cpp -L/repo/build  -lGCode -I/repo/src/gcode -I/cbang/src -I/repo/src -fsanitize=fuzzer,address -o /fuzz_find -L/cbang/lib -lcbang -lcbang-boost -llz4 -lbz2 -levent -lre2 -lsqlite3 -lyaml -lz
 
-FROM ubuntu:20.04 as package
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev libexpat-dev
-COPY --from=builder /fuzz /fuzz_find
+# FROM ubuntu:20.04 as package
+# RUN apt-get update
+# RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev libexpat-dev
+# COPY --from=builder /fuzz /fuzz_find
