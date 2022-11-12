@@ -17,3 +17,4 @@ FROM ubuntu:20.04 as package
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libssl-dev libexpat-dev
 COPY --from=builder /fuzz /fuzz_find
+COPY --from=builder /repo/gcodetool /

@@ -1,0 +1,6 @@
+project: camotics
+target: gcodetool
+cmds:
+  - cmd: /gcodetool
+    env:
+      DISABLE_SMOKETEST: '1'
